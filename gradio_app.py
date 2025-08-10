@@ -661,6 +661,8 @@ if __name__ == '__main__':
     parser.add_argument('--enable_flashvdm', action='store_true')
     parser.add_argument('--compile', action='store_true')
     parser.add_argument('--low_vram_mode', action='store_true')
+    parser.add_argument("--gradio_user", type=str, required=True)
+    parser.add_argument("--gradio_password", type=str, required=True)
     args = parser.parse_args()
 
     SAVE_DIR = args.cache_path
@@ -754,5 +756,5 @@ if __name__ == '__main__':
     if args.low_vram_mode:
         torch.cuda.empty_cache()
     demo = build_app()
-    app = gr.mount_gradio_app(app, demo, path="/", root_path=ROOT_PATH, auth=(GRADIO_USER, GRADIO_PASSWORD))
+    app = gr.mount_gradio_app(app, demo, path="/", root_path=ROOT_PATH, auth=(args.gradio_user, args.gradio_password))
     uvicorn.run(app, host=args.host, port=args.port, workers=1)
