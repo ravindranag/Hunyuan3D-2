@@ -30,7 +30,7 @@ import uuid
 from hy3dgen.shapegen.utils import logger
 
 MAX_SEED = int(1e7)
-ROOT_PATH = os.environ.get('PUBLIC_IPV4', 'http://localhost:8080')
+ROOT_PATH = f"http://{os.environ.get('PUBLIC_IPV4')}:8080"
 GRADIO_USER = os.environ.get('GRADIO_USER')
 GRADIO_PASSWORD = os.environ.get('GRADIO_PASSWORD')
 
@@ -756,5 +756,5 @@ if __name__ == '__main__':
     if args.low_vram_mode:
         torch.cuda.empty_cache()
     demo = build_app()
-    app = gr.mount_gradio_app(app, demo, path="/", root_path=ROOT_PATH, auth=(args.gradio_user, args.gradio_password))
+    app = gr.mount_gradio_app(app, demo, path="/", server_name="0.0.0.0", root_path=ROOT_PATH, auth=(args.gradio_user, args.gradio_password))
     uvicorn.run(app, host=args.host, port=args.port, workers=1)
